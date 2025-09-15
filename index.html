@@ -79,6 +79,18 @@
         .feedback.incorrect {
             color: #d32f2f;
         }
+        .explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            font-size: 0.9em;
+            line-height: 1.5;
+            text-align: left;
+        }
+        .explanation strong {
+            color: #1565c0;
+        }
         .navigation-buttons {
             margin-top: 20px;
         }
@@ -104,8 +116,29 @@
             font-size: 1.2em;
             margin-top: 20px;
         }
-        .home-screen, .end-screen {
+        .home-screen, .end-screen, .review-screen {
             text-align: center;
+            display: none;
+        }
+        .home-screen.active, .end-screen.active, .review-screen.active {
+            display: block;
+        }
+        .review-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+        }
+        .review-list li {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+        }
+        .review-list button {
+            background-color: #2196F3;
+            padding: 8px 16px;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -119,12 +152,14 @@
         </div>
 
         <div id="quiz-screen" class="screen quiz-section">
+            <p id="progress-info"></p>
             <p id="score-display">점수: 0</p>
             <div class="question-box">
                 <p id="question-text"></p>
             </div>
             <ul id="options-list" class="options"></ul>
             <p id="feedback" class="feedback"></p>
+            <div id="explanation-box" class="explanation" style="display:none;"></div>
             <div class="navigation-buttons">
                 <button id="next-button" onclick="loadNewQuestion()" disabled>다음 문제</button>
                 <button onclick="endGame()">종료</button>
@@ -135,6 +170,16 @@
             <h1>게임 종료</h1>
             <p id="final-score"></p>
             <button onclick="restartGame()">다시 시작</button>
+            <button id="review-button" onclick="showReview()">오답 노트</button>
+        </div>
+
+        <div id="review-screen" class="screen review-screen">
+            <h1>오답 노트</h1>
+            <p>틀렸던 문제들을 다시 풀어보세요.</p>
+            <ul id="review-list" class="review-list"></ul>
+            <div class="navigation-buttons">
+                <button onclick="endGame()">메뉴로 돌아가기</button>
+            </div>
         </div>
     </div>
 
@@ -219,7 +264,7 @@
             {"Region":"건조아시아와 북부아프리카","Country":"아랍에미리트","Category":"산업·경제","Fact":"석유·천연가스"},
             {"Region":"건조아시아와 북부아프리카","Country":"아랍에미리트","Category":"사회·문화","Fact":"외국인 노동자 대규모 유입(청장년층에서 남초 현상 발생)"},
             {"Region":"건조아시아와 북부아프리카","Country":"아랍에미리트","Category":"국제관계","Fact":"걸프 협력 회의(GCC) 회원국"},
-            {"Region":"건조아시아와 북부아프리카","Country":"카타르","Category":"산업·경제","Fact":"천연가스 대국, 고소득국"},
+            {"Region":"건조아시아와 ","Country":"카타르","Category":"산업·경제","Fact":"천연가스 대국, 고소득국"},
             {"Region":"건조아시아와 북부아프리카","Country":"카타르","Category":"사회·문화","Fact":"2022년 FIFA 월드컵 개최(겨울 개최)"},
             {"Region":"건조아시아와 북부아프리카","Country":"카타르","Category":"국제관계","Fact":"걸프 협력 회의(GCC) 회원국"},
             {"Region":"건조아시아와 북부아프리카","Country":"카자흐스탄","Category":"자연환경","Fact":"초원·스텝 기후, 아랄해 연안(사막화 문제)"},
@@ -256,8 +301,11 @@
 
         let score = 0;
         let questionCount = 0;
-        let currentQuestion = {};
+        let currentQuestionData = {};
         let currentMode = '';
+        let wrongAnswers = [];
+        let isReviewMode = false;
+        let reviewIndex = 0;
 
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -278,16 +326,19 @@
             shuffleArray(options);
 
             return {
+                type: 'fact_to_country',
                 questionText: `다음 설명에 해당하는 나라는 어디일까요?<br>- ${entry.Fact}`,
                 correctAnswer: correctCountry,
-                options: options
+                options: options,
+                explanation: `**${entry.Country}**에 대한 정보입니다.<br>위치: ${entry.Region}<br>분류: ${entry.Category}<br>설명: ${entry.Fact}`
             };
         }
 
         function getCountryToFactQuestion() {
             const correctCountry = geographyData[Math.floor(Math.random() * geographyData.length)].Country;
-            const factsForCountry = geographyData.filter(item => item.Country === correctCountry).map(item => item.Fact);
-            const correctFact = factsForCountry[Math.floor(Math.random() * factsForCountry.length)];
+            const factsForCountry = geographyData.filter(item => item.Country === correctCountry);
+            const correctFactEntry = factsForCountry[Math.floor(Math.random() * factsForCountry.length)];
+            const correctFact = correctFactEntry.Fact;
             
             const otherFacts = geographyData.filter(item => item.Country !== correctCountry).map(item => item.Fact);
             shuffleArray(otherFacts);
@@ -297,85 +348,134 @@
             shuffleArray(options);
 
             return {
+                type: 'country_to_fact',
                 questionText: `다음 설명 중 '${correctCountry}'에 대한 설명은 무엇일까요?`,
                 correctAnswer: correctFact,
-                options: options
+                options: options,
+                explanation: `**${correctCountry}**에 대한 정보입니다.<br>위치: ${correctFactEntry.Region}<br>분류: ${correctFactEntry.Category}<br>설명: ${correctFactEntry.Fact}`
             };
         }
 
         function loadNewQuestion() {
-            document.getElementById('feedback').textContent = '';
-            document.getElementById('next-button').disabled = true;
-            document.getElementById('options-list').innerHTML = '';
+            const nextButton = document.getElementById('next-button');
+            const explanationBox = document.getElementById('explanation-box');
+            
+            nextButton.disabled = true;
+            explanationBox.style.display = 'none';
 
-            if (currentMode === 'fact_to_country') {
-                currentQuestion = getFactToCountryQuestion();
+            if (isReviewMode) {
+                if (reviewIndex >= wrongAnswers.length) {
+                    alert('문제를 모두 풀었습니다!');
+                    endGame();
+                    return;
+                }
+                currentQuestionData = wrongAnswers[reviewIndex];
+                reviewIndex++;
+                document.getElementById('progress-info').textContent = `문제 (${reviewIndex}/${wrongAnswers.length})`;
             } else {
-                currentQuestion = getCountryToFactQuestion();
+                if (currentMode === 'fact_to_country') {
+                    currentQuestionData = getFactToCountryQuestion();
+                } else {
+                    currentQuestionData = getCountryToFactQuestion();
+                }
+                questionCount++;
+                document.getElementById('progress-info').textContent = `문제 ${questionCount}번째`;
             }
 
-            document.getElementById('question-text').innerHTML = currentQuestion.questionText;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('question-text').innerHTML = currentQuestionData.questionText;
             
             const optionsList = document.getElementById('options-list');
-            currentQuestion.options.forEach(option => {
+            optionsList.innerHTML = '';
+            currentQuestionData.options.forEach(option => {
                 const li = document.createElement('li');
                 li.textContent = option;
                 li.onclick = () => checkAnswer(li, option);
                 optionsList.appendChild(li);
             });
-            questionCount++;
         }
 
         function checkAnswer(selectedLi, selectedOption) {
             const options = document.getElementById('options-list').children;
             const feedback = document.getElementById('feedback');
-            document.getElementById('next-button').disabled = false;
-
-            // 이미 정답을 체크했는지 확인
+            const explanationBox = document.getElementById('explanation-box');
+            const nextButton = document.getElementById('next-button');
+            
             if (selectedLi.classList.contains('selected')) return;
 
             Array.from(options).forEach(li => {
                 li.classList.add('selected');
-                if (li.textContent === currentQuestion.correctAnswer) {
+                if (li.textContent === currentQuestionData.correctAnswer) {
                     li.classList.add('correct');
                 } else if (li === selectedLi) {
                     li.classList.add('incorrect');
                 }
                 li.onclick = null;
             });
-            
-            if (selectedOption === currentQuestion.correctAnswer) {
+
+            if (selectedOption === currentQuestionData.correctAnswer) {
                 feedback.textContent = '✅ 정답입니다!';
                 feedback.classList.remove('incorrect');
                 feedback.classList.add('correct');
-                score++;
+                if (!isReviewMode) {
+                    score++;
+                }
             } else {
-                feedback.textContent = `❌ 틀렸습니다. 정답은 '${currentQuestion.correctAnswer}'입니다.`;
+                feedback.textContent = `❌ 틀렸습니다. 정답은 '${currentQuestionData.correctAnswer}'입니다.`;
                 feedback.classList.remove('correct');
                 feedback.classList.add('incorrect');
+                if (!isReviewMode) {
+                    wrongAnswers.push(currentQuestionData);
+                }
             }
+            
+            explanationBox.innerHTML = currentQuestionData.explanation;
+            explanationBox.style.display = 'block';
+
             document.getElementById('score-display').textContent = `점수: ${score}`;
+            nextButton.disabled = false;
         }
 
         function startGame(mode) {
             currentMode = mode;
             score = 0;
             questionCount = 0;
+            wrongAnswers = [];
+            isReviewMode = false;
             document.getElementById('home-screen').classList.remove('active');
-            document.getElementById('end-screen').classList.remove('active');
             document.getElementById('quiz-screen').classList.add('active');
             loadNewQuestion();
         }
         
         function endGame() {
             document.getElementById('quiz-screen').classList.remove('active');
+            document.getElementById('review-screen').classList.remove('active');
             document.getElementById('end-screen').classList.add('active');
-            document.getElementById('final-score').textContent = `총 ${questionCount}문제 중 ${score}문제를 맞히셨습니다.`;
+            if (isReviewMode) {
+                document.getElementById('final-score').textContent = `문제를 모두 풀었습니다!`;
+            } else {
+                document.getElementById('final-score').textContent = `총 ${questionCount}문제 중 ${score}문제를 맞히셨습니다.`;
+            }
+            if (wrongAnswers.length > 0) {
+                document.getElementById('review-button').style.display = 'block';
+            } else {
+                document.getElementById('review-button').style.display = 'none';
+            }
         }
 
         function restartGame() {
             document.getElementById('end-screen').classList.remove('active');
             document.getElementById('home-screen').classList.add('active');
+        }
+
+        function showReview() {
+            isReviewMode = true;
+            reviewIndex = 0;
+            document.getElementById('end-screen').classList.remove('active');
+            document.getElementById('quiz-screen').classList.add('active');
+            document.getElementById('score-display').textContent = `오답 노트`;
+            document.getElementById('next-button').textContent = '다음 문제';
+            loadNewQuestion();
         }
     </script>
 </body>
