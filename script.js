@@ -167,11 +167,9 @@ function getCountryToFactQuestion() {
 }
 
 function loadNewQuestion() {
-    const nextButton = document.getElementById('next-button');
     const feedbackDiv = document.getElementById('feedback');
     const explanationBox = document.getElementById('explanation-box');
     
-    nextButton.disabled = true;
     feedbackDiv.style.display = 'none';
     explanationBox.style.display = 'none';
 
@@ -210,7 +208,6 @@ function checkAnswer(selectedLi, selectedOption) {
     const options = document.getElementById('options-list').children;
     const feedbackDiv = document.getElementById('feedback');
     const explanationBox = document.getElementById('explanation-box');
-    const nextButton = document.getElementById('next-button');
     
     if (selectedLi.classList.contains('selected')) return;
 
@@ -248,7 +245,8 @@ function checkAnswer(selectedLi, selectedOption) {
     if (!isReviewMode) {
         document.getElementById('score-display').textContent = `점수: ${score}`;
     }
-    nextButton.disabled = false;
+
+    setTimeout(loadNewQuestion, 1000);
 }
 
 function startGame(mode) {
@@ -260,7 +258,6 @@ function startGame(mode) {
     document.getElementById('home-screen').classList.remove('active');
     document.getElementById('quiz-screen').classList.add('active');
     document.getElementById('end-quiz-btn').style.display = 'block';
-    document.getElementById('next-button').textContent = '다음 문제';
     loadNewQuestion();
 }
 
@@ -303,12 +300,11 @@ function showReview() {
     document.getElementById('end-screen').classList.remove('active');
     document.getElementById('quiz-screen').classList.add('active');
     document.getElementById('score-display').textContent = '오답 노트 모드';
-    document.getElementById('next-button').textContent = '다음 오답 문제';
     document.getElementById('end-quiz-btn').style.display = 'block';
     loadNewQuestion();
 }
 
-// 키보드 지원
+// 키보드 지원 (Enter 키로 다음 문제로 넘어가는 기능 제거)
 document.addEventListener('keydown', function(event) {
     if (document.getElementById('quiz-screen').classList.contains('active')) {
         const options = document.getElementById('options-list').children;
@@ -318,9 +314,6 @@ document.addEventListener('keydown', function(event) {
                 const optionText = li.textContent.substring(3);
                 checkAnswer(li, optionText);
             }
-        }
-        if (event.key === 'Enter' && !document.getElementById('next-button').disabled) {
-            loadNewQuestion();
         }
     }
 });
