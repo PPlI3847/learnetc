@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>세계 지리 마스터 퀴즈</title>
+    <title>세계 지리 수행평가 퀴즈</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,7 +25,7 @@
             width: 100%;
             max-width: 600px;
             text-align: center;
-            position: relative;
+            position: relative; /* 자식 요소의 절대 위치 기준이 됨 */
         }
         h1 {
             color: #4CAF50;
@@ -146,7 +146,6 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            display: none;
         }
         #end-quiz-btn button {
             background-color: #f44336;
@@ -163,11 +162,10 @@
             <p>원하는 게임 모드를 선택하세요.</p>
             <button onclick="startGame('fact_to_country')">1. 특성 → 국가</button>
             <button onclick="startGame('country_to_fact')">2. 국가 → 특성</button>
-            <a href="https://www.seterra.com" target="_blank">국가 맞추기 게임하기</a>
         </div>
 
         <div id="quiz-screen" class="screen quiz-section">
-            <div id="end-quiz-btn">
+            <div id="end-quiz-btn" style="display:none;">
                 <button onclick="endGame()">종료</button>
             </div>
             <p id="progress-info"></p>
@@ -180,7 +178,6 @@
             <div id="explanation-box" class="explanation" style="display:none;"></div>
             <div class="navigation-buttons">
                 <button id="next-button" onclick="loadNewQuestion()" disabled>다음 문제</button>
-                <a href="https://www.seterra.com" target="_blank">국가 맞추기 게임하기</a>
             </div>
         </div>
         
@@ -198,7 +195,6 @@
             <div class="navigation-buttons">
                 <button onclick="endGame()">메뉴로 돌아가기</button>
             </div>
-            <a href="https://www.seterra.com" target="_blank">국가 맞추기 게임하기</a>
         </div>
     </div>
 
@@ -268,7 +264,7 @@
             {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"농업·자원","Fact":"건조 기후, 밀·목화 재배"},
             {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"산업·경제","Fact":"석유·천연가스 자원 풍부(페르시아 만)"},
             {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"전통 음식","Fact":"케밥, 압구시트 등"},
-            {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"종교","Fact":"이라크와 더불어 이슬람교 중 시아파 비중이 높음"},
+            {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"종교","Fact":"이슬람교 중 시아파 비중이 높음"},
             {"Region":"건조아시아와 북부아프리카","Country":"수단","Category":"자연환경","Fact":"사헬 지대, 사막화 피해"},
             {"Region":"건조아시아와 북부아프리카","Country":"수단","Category":"갈등","Fact":"다르푸르 분쟁, 남수단 분리(2011)"},
             {"Region":"건조아시아와 북부아프리카","Country":"시리아","Category":"특징","Fact":"난민이 가장 많이 발생하는 국가"},
@@ -283,7 +279,7 @@
             {"Region":"건조아시아와 북부아프리카","Country":"아랍에미리트","Category":"산업·경제","Fact":"석유·천연가스"},
             {"Region":"건조아시아와 북부아프리카","Country":"아랍에미리트","Category":"사회·문화","Fact":"외국인 노동자 대규모 유입(청장년층에서 남초 현상 발생)"},
             {"Region":"건조아시아와 북부아프리카","Country":"아랍에미리트","Category":"국제관계","Fact":"걸프 협력 회의(GCC) 회원국"},
-            {"Region":"건조아시아와 북부아프리카","Country":"카타르","Category":"산업·경제","Fact":"천연가스 대국, 고소득국"},
+            {"Region":"건조아시아와 ","Country":"카타르","Category":"산업·경제","Fact":"천연가스 대국, 고소득국"},
             {"Region":"건조아시아와 북부아프리카","Country":"카타르","Category":"사회·문화","Fact":"2022년 FIFA 월드컵 개최(겨울 개최)"},
             {"Region":"건조아시아와 북부아프리카","Country":"카타르","Category":"국제관계","Fact":"걸프 협력 회의(GCC) 회원국"},
             {"Region":"건조아시아와 북부아프리카","Country":"카자흐스탄","Category":"자연환경","Fact":"초원·스텝 기후, 아랄해 연안(사막화 문제)"},
@@ -310,15 +306,13 @@
             {"Region":"유럽과 북부 아메리카","Country":"이탈리아","Category":"갈등","Fact":"파다니아(이탈리아 북부) 분리 독립 운동"},
             {"Region":"유럽과 북부 아메리카","Country":"스페인(에스파냐)","Category":"산업","Fact":"빌바오 철강 산업(전통 공업, 쇠퇴)"},
             {"Region":"유럽과 북부 아메리카","Country":"스페인(에스파냐)","Category":"갈등","Fact":"카탈루냐 분리 독립(바르셀로나 중심), 바스크 분리 운동"},
-            {"Region":"유럽과 북부 아메리카","Country":"네덜란드","Category":"산업","Fact":"로테르담(라인강 하구, 세계적 무역항, 석유화학 클러스터)"},
-            {"Region":"유럽과 북부 아메리카","Country":"네덜란드","Category":"갈등","Fact":"북부 플랑드르(네덜란드어, 경제적 수준↑) vs 남부 왈로니아(프랑스어)"},
             {"Region":"유럽과 북부 아메리카","Country":"벨기에","Category":"특징","Fact":"EU 본부(브뤼셀) 소재"},
             {"Region":"유럽과 북부 아메리카","Country":"스웨덴","Category":"특징","Fact":"시스타 사이언스 시티(스톡홀름, ICT 중심 첨단 산업 클러스터)"},
             {"Region":"유럽과 북부 아메리카","Country":"핀란드","Category":"특징","Fact":"오울루(과거 제지·연어 무역항 ICT 클러스터, 노키아 중심, 산학 협력)"},
             {"Region":"유럽과 북부 아메리카","Country":"스위스","Category":"특징","Fact":"EU 비회원국, 그러나 솅겐 협정 가입으로 자유 이동 가능"}
         ];
 
-               let score = 0;
+        let score = 0;
         let questionCount = 0;
         let currentQuestionData = {};
         let currentMode = '';
@@ -349,7 +343,7 @@
                 questionText: `다음 설명에 해당하는 나라는 어디일까요?<br>- ${entry.Fact}`,
                 correctAnswer: correctCountry,
                 options: options,
-                explanation: `<strong>${entry.Country}</strong>에 대한 정보입니다.<br>위치: ${entry.Region}<br>분류: ${entry.Category}<br>설명: ${entry.Fact}`
+                explanation: `**${entry.Country}**에 대한 정보입니다.<br>위치: ${entry.Region}<br>분류: ${entry.Category}<br>설명: ${entry.Fact}`
             };
         }
 
@@ -371,7 +365,7 @@
                 questionText: `다음 설명 중 '${correctCountry}'에 대한 설명은 무엇일까요?`,
                 correctAnswer: correctFact,
                 options: options,
-                explanation: `<strong>${correctCountry}</strong>에 대한 정보입니다.<br>위치: ${correctFactEntry.Region}<br>분류: ${correctFactEntry.Category}<br>설명: ${correctFactEntry.Fact}`
+                explanation: `**${correctCountry}**에 대한 정보입니다.<br>위치: ${correctFactEntry.Region}<br>분류: ${correctFactEntry.Category}<br>설명: ${correctFactEntry.Fact}`
             };
         }
 
@@ -444,16 +438,14 @@
                 feedback.classList.remove('correct');
                 feedback.classList.add('incorrect');
                 if (!isReviewMode) {
-                    wrongAnswers.push(JSON.parse(JSON.stringify(currentQuestionData)));
+                    wrongAnswers.push(currentQuestionData);
                 }
             }
             
             explanationBox.innerHTML = currentQuestionData.explanation;
             explanationBox.style.display = 'block';
 
-            if (!isReviewMode) {
-                document.getElementById('score-display').textContent = `점수: ${score}`;
-            }
+            document.getElementById('score-display').textContent = `점수: ${score}`;
             nextButton.disabled = false;
         }
 
@@ -466,7 +458,6 @@
             document.getElementById('home-screen').classList.remove('active');
             document.getElementById('quiz-screen').classList.add('active');
             document.getElementById('end-quiz-btn').style.display = 'block';
-            document.getElementById('score-display').textContent = `점수: 0`;
             loadNewQuestion();
         }
         
@@ -505,9 +496,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
