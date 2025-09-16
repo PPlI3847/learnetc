@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>세계 지리 수행평가 퀴즈</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div id="home-screen" class="screen active">
+            <h1>세계 지리 퀴즈</h1>
+            <p>원하는 게임 모드를 선택하세요!</p>
+            <button onclick="startGame('fact_to_country')">특성 -> 국가</button>
+            <button onclick="startGame('country_to_fact')">국가 -> 특성</button>
+        </div>
+
+        <div id="quiz-screen" class="screen quiz-section">
+            <div id="end-quiz-btn" style="display:none;">
+                <button onclick="endGame()">종료</button>
+            </div>
+            <p id="progress-info"></p>
+            <p id="score-display">점수: 0</p>
+            <div class="question-box">
+                <p id="question-text"></p>
+            </div>
+            <ul id="options-list" class="options"></ul>
+            <div id="feedback" class="feedback" style="display:none;"></div>
+            <div id="explanation-box" class="explanation" style="display:none;"></div>
+            <div class="navigation-buttons">
+                <button id="next-button" onclick="loadNewQuestion()" disabled>다음 문제</button>
+            </div>
+        </div>
+        
+        <div id="end-screen" class="screen">
+            <h1>게임 종료</h1>
+            <div id="final-score"></div>
+            <button onclick="restartGame()">다시 시작</button>
+            <button id="review-button" onclick="showReview()">오답 노트</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
