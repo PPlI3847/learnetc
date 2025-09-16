@@ -148,7 +148,7 @@ function getAllFactsForCountry(country) {
         const categoryFacts = facts.filter(item => item.Category === category);
         allFacts += `<strong>${category}:</strong><br>`;
         categoryFacts.forEach(fact => {
-            allFacts += `• ${fact.Fact}<br>`;
+            allFacts += `${fact.Fact}<br>`;
         });
         allFacts += `<br>`;
     });
