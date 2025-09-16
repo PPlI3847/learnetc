@@ -1,113 +1,79 @@
-const geographyData = [
-    {"Region":"몬순아시아","Country":"중국","Category":"자연환경","Fact":"서고동저 지형, 주요 하천(창장강·황허강)"},
-    {"Region":"몬순아시아","Country":"중국","Category":"산업·경제","Fact":"'세계의 공장', 제철·자동차 세계 1위, 첨단 산업 단지(중관춘, 푸둥), 농업(세계 1위 밀·쌀 생산국)"},
-    {"Region":"몬순아시아","Country":"중국","Category":"전통 생활","Fact":"가옥(사합원), 의복(치파오), 소수 민족(위구르족·티베트족)"},
-    {"Region":"몬순아시아","Country":"중국","Category":"갈등","Fact":"소수민족 분리 독립 갈등, 센카쿠·난사 군도 분쟁"},
-    {"Region":"몬순아시아","Country":"미얀마","Category":"특징","Fact":"불교 국가"},
-    {"Region":"몬순아시아","Country":"미얀마","Category":"갈등","Fact":"로힝야족(이슬람교)과의 갈등"},
-    {"Region":"몬순아시아","Country":"일본","Category":"자연환경","Fact":"환태평양 조산대(지진·화산 활발), 다설 지역(삿포로 눈축제: 세계 3대 축제)"},
-    {"Region":"몬순아시아","Country":"일본","Category":"농업","Fact":"벼농사 발달, 전통음식(스시)"},
-    {"Region":"몬순아시아","Country":"일본","Category":"산업·경제","Fact":"가공무역 발달, 자동차·전자 산업, 첨단 제조업(로봇, 정밀 기계 등)"},
-    {"Region":"몬순아시아","Country":"일본","Category":"사회·문화","Fact":"합장가옥(갓쇼), 전통의복(기모노)"},
-    {"Region":"몬순아시아","Country":"일본","Category":"갈등","Fact":"쿠릴열도, 센카쿠열도 분쟁"},
-    {"Region":"몬순아시아","Country":"몽골","Category":"자연환경","Fact":"국토의 대부분이 건조 기후"},
-    {"Region":"몬순아시아","Country":"몽골","Category":"전통 생활","Fact":"전통 가옥(게르), 유목 생활, 허르헝(양고기 요리)"},
-    {"Region":"몬순아시아","Country":"필리핀","Category":"자연환경","Fact":"환태평양 조산대(지진·화산 활발)"},
-    {"Region":"몬순아시아","Country":"필리핀","Category":"사회·문화","Fact":"스페인 식민지 영향으로 크리스트교 신자 다수"},
-    {"Region":"몬순아시아","Country":"필리핀","Category":"갈등","Fact":"모로족 분리 독립 운동(민다나오섬, 이슬람교)"},
-    {"Region":"몬순아시아","Country":"필리핀","Category":"전통 문화","Fact":"전통 의복(바롱), 전통 음식(아도보, 레촌 등)"},
-    {"Region":"몬순아시아","Country":"베트남","Category":"자연환경","Fact":"메콩강 삼각주 곡창 지대, 할롱베이(유네스코 등재, 카르스트 지형)"},
-    {"Region":"몬순아시아","Country":"베트남","Category":"농업·자원","Fact":"세계 2위 커피 생산국, 쌀 수출 강국"},
-    {"Region":"몬순아시아","Country":"베트남","Category":"산업·경제","Fact":"최근 공업 성장, 외국인 투자 증가"},
-    {"Region":"몬순아시아","Country":"베트남","Category":"사회·문화","Fact":"전통 음식(퍼: 쌀국수, 반미), 전통 의복(아오자이)"},
-    {"Region":"몬순아시아","Country":"베트남","Category":"갈등","Fact":"남중국해 영유권 갈등"},
-    {"Region":"몬순아시아","Country":"타이(태국)","Category":"자연환경","Fact":"짜오프라야강 유역, 메콩강 접경"},
-    {"Region":"몬순아시아","Country":"타이(태국)","Category":"농업·자원","Fact":"벼농사 중심, 쌀작 기원 문화(송크란 축제)"},
-    {"Region":"몬순아시아","Country":"타이(태국)","Category":"산업·경제","Fact":"관광산업 발달"},
-    {"Region":"몬순아시아","Country":"타이(태국)","Category":"사회·문화","Fact":"전통 음식(카오팟, 팟타이, 톰 얌꿍), 불교 신자 다수"},
-    {"Region":"몬순아시아","Country":"인도네시아","Category":"인구특징","Fact":"세계 인구 4위, 세계 최대 이슬람 인구"},
-    {"Region":"몬순아시아","Country":"인도네시아","Category":"자연환경","Fact":"신기 조산대(지진, 화산 활발), 계단식 논 발달"},
-    {"Region":"몬순아시아","Country":"인도네시아","Category":"농업·자원","Fact":"세계 커피 3위 생산국, 플랜테이션 농업 발달(팜유, 천연고무)"},
-    {"Region":"몬순아시아","Country":"인도네시아","Category":"산업·경제","Fact":"천연가스·석유, 석탄 수출, 노동집약적 공업 발달"},
-    {"Region":"몬순아시아","Country":"인도네시아","Category":"사회·문화","Fact":"전통 음식(나시고렝), 전통 가옥(루마 아닷: 고상가옥), 동남아시아 국가 연합(ASEAN)의 본부 위치"},
-    {"Region":"몬순아시아","Country":"인도","Category":"자연환경","Fact":"히말라야 산맥, 데칸고원, 갠지스강 유역 충적평야(벼농사)"},
-    {"Region":"몬순아시아","Country":"인도","Category":"농업","Fact":"여름 몬순으로 벼농사 발달, 데칸고원(목화), 북동부(다르질링 지역 차 생산)"},
-    {"Region":"몬순아시아","Country":"인도","Category":"산업·경제","Fact":"뭄바이(영화산업: 발리우드), 첨단 산업(방갈로르 '인도의 실리콘밸리')"},
-    {"Region":"몬순아시아","Country":"인도","Category":"사회·문화","Fact":"힌두교 중심, 전통의복(사리와 도티)"},
-    {"Region":"몬순아시아","Country":"인도","Category":"갈등","Fact":"카슈미르 분쟁(vs 파키스탄)"},
-    {"Region":"몬순아시아","Country":"네팔","Category":"특징","Fact":"인도와 함께 힌두교 국가"},
-    {"Region":"몬순아시아","Country":"파키스탄","Category":"특징","Fact":"이슬람 국가, 세계 인구 수 5위"},
-    {"Region":"몬순아시아","Country":"방글라데시","Category":"특징","Fact":"이슬람 국가, 갠지스 강 하류에 위치"},
-    {"Region":"몬순아시아","Country":"스리랑카","Category":"자연환경","Fact":"인도양 섬나라, 차 플랜테이션(실론 차)"},
-    {"Region":"몬순아시아","Country":"스리랑카","Category":"갈등","Fact":"신할리즈족(불교) vs 타밀족(힌두교)"},
-    {"Region":"오세아니아","Country":"오스트레일리아","Category":"자원","Fact":"자원 부국, 석탄·철광석·보크사이트 등이 풍부하여 광업 발달"},
-    {"Region":"오세아니아","Country":"오스트레일리아","Category":"농업","Fact":"기업적 농목업(스테이션) -> 양모, 유제품, 소고기 수출"},
-    {"Region":"오세아니아","Country":"오스트레일리아","Category":"원주민","Fact":"애버리지니와 유럽계 갈등"},
-    {"Region":"몬순아시아","Country":"말레이시아","Category":"자연환경","Fact":"말라카 해협 국제 해상 요충지"},
-    {"Region":"몬순아시아","Country":"말레이시아","Category":"산업·경제","Fact":"석유 및 천연가스, 주석, 팜유 등 수출"},
-    {"Region":"몬순아시아","Country":"말레이시아","Category":"사회·문화","Fact":"이슬람교 비율이 가장 높음. 그 다음 불교"},
-    {"Region":"몬순아시아","Country":"싱가포르","Category":"특징","Fact":"1인당 GDP 아시아 1위, 도시 국가, 교통·무역 요충지(인도양과 태평양 사이)"},
-    {"Region":"오세아니아","Country":"뉴질랜드","Category":"자연환경","Fact":"북섬(주로 화산지형), 남섬(빙하 지형), 국토 전체가 서안해양성 기후"},
-    {"Region":"오세아니아","Country":"뉴질랜드","Category":"갈등","Fact":"마오리족과 유럽계 갈등 발생, 공존 노력(마오리어 공용어 지정)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"튀르키예","Category":"자연환경","Fact":"아나톨리아 고원(신기 조산대), 파묵칼레(카르스트 지형)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"튀르키예","Category":"산업·경제","Fact":"2차 산업 내 제조업 생산액 비율이 상대적으로 높음"},
-    {"Region":"건조아시아와 북부아프리카","Country":"튀르키예","Category":"갈등","Fact":"티그리스·유프라테스 강 상류 댐 건설로 수자원 갈등"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이집트","Category":"인구","Fact":"건조 아시아 및 북부 아프리카에서 인구 가장 많음"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이집트","Category":"자연환경","Fact":"나일강 하구 삼각주, 수에즈 운하"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이집트","Category":"기후","Fact":"국토 전체가 사막 기후, 오아시스·관개 농업(대추야자·밀)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이집트","Category":"산업·경제","Fact":"관광 산업, 교통(수에즈 운하: 홍해와 지중해 연결)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이집트","Category":"갈등","Fact":"국제·외래 하천인 나일강(상류에 위치한 에티오피아, 수단과 수자원 갈등)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"인구","Fact":"건조 아시아 및 북부 아프리카에서 인구 2위"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"자연환경","Fact":"이란 고원(신기 조산대), 바드기르(환풍구), 카나트(지하 관개 시설)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"농업·자원","Fact":"건조 기후, 밀·목화 재배"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"산업·경제","Fact":"석유·천연가스 자원 풍부(페르시아 만)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"전통 음식","Fact":"케밥, 압구시트 등"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이란","Category":"종교","Fact":"이슬람교 중 시아파 비중이 높음"},
-    {"Region":"건조아시아와 북부아프리카","Country":"수단","Category":"자연환경","Fact":"사헬 지대, 사막화 피해"},
-    {"Region":"건조아시아와 북부아프리카","Country":"수단","Category":"갈등","Fact":"다르푸르 분쟁, 남수단 분리(2011)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"시리아","Category":"특징","Fact":"난민이 가장 많이 발생하는 국가"},
-    {"Region":"건조아시아와 북부아프리카","Country":"모로코","Category":"자연환경","Fact":"아틀라스산맥(신기조산대), 지중해 인근 지역은 지중해성 기후"},
-    {"Region":"건조아시아와 북부아프리카","Country":"모로코","Category":"인구 이동","Fact":"프랑스로 인구 이동(경제적 요인)이 많은 북부 아프리카 3인방 중 하나"},
-    {"Region":"건조아시아와 북부아프리카","Country":"사우디아라비아","Category":"산업·경제","Fact":"세계 최대 산유국, '비전 2030' 신도시(네옴), 대추야자 재배"},
-    {"Region":"건조아시아와 북부아프리카","Country":"사우디아라비아","Category":"사회·문화","Fact":"이슬람 성지 메카·메디나"},
-    {"Region":"건조아시아와 북부아프리카","Country":"사우디아라비아","Category":"국제관계","Fact":"걸프 협력 회의(GCC) 회원국"},
-    {"Region":"건조아시아와 북부아프리카","Country":"아랍에미리트","Category":"자연환경","Fact":"사막 기후, 두바이 아부다비 도시 발달"},
-    {"Region":"건조아시아와 북부아프리카","Country":"리비아","Category":"자연환경","Fact":"사하라 사막"},
-    {"Region":"건조아시아와 북부아프리카","Country":"리비아","Category":"산업·경제","Fact":"석유 자원 풍부"},
-    {"Region":"건조아시아와 북부아프리카","Country":"아랍에미리트","Category":"산업·경제","Fact":"석유·천연가스"},
-    {"Region":"건조아시아와 북부아프리카","Country":"아랍에미리트","Category":"사회·문화","Fact":"외국인 노동자 대규모 유입(청장년층에서 남초 현상 발생)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"아랍에미리트","Category":"국제관계","Fact":"걸프 협력 회의(GCC) 회원국"},
-    {"Region":"건조아시아와 북부아프리카","Country":"카타르","Category":"산업·경제","Fact":"천연가스 대국, 고소득국"},
-    {"Region":"건조아시아와 북부아프리카","Country":"카타르","Category":"사회·문화","Fact":"2022년 FIFA 월드컵 개최(겨울 개최)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"카타르","Category":"국제관계","Fact":"걸프 협력 회의(GCC) 회원국"},
-    {"Region":"건조아시아와 북부아프리카","Country":"카자흐스탄","Category":"자연환경","Fact":"초원·스텝 기후, 아랄해 연안(사막화 문제)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"카자흐스탄","Category":"농업·자원","Fact":"유목, 석유·천연가스 생산(카스피해)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"카자흐스탄","Category":"전통가옥","Fact":"유르트(게르와 비슷)"},
-    {"Region":"건조아시아와 북부아프리카","Country":"우즈베키스탄","Category":"특징","Fact":"아랄해 연안: 사막화 문제"},
-    {"Region":"건조아시아와 북부아프리카","Country":"이스라엘","Category":"특징","Fact":"크리스트교·유대교·이슬람교 성지 공존"},
-    {"Region":"유럽과 북부 아메리카","Country":"영국","Category":"역사","Fact":"산업혁명 발생지"},
-    {"Region":"유럽과 북부 아메리카","Country":"영국","Category":"자연환경","Fact":"서안해양성 기후, 혼합농업, 목축업 및 낙농업 발달"},
-    {"Region":"유럽과 북부 아메리카","Country":"영국","Category":"산업지역","Fact":"요크셔·랭커셔(전통 공업 지역, 쇠퇴), 뉴캐슬·미들즈브러(임해 공업), 케임브리지 사이언스 파크(첨단 산업)"},
-    {"Region":"유럽과 북부 아메리카","Country":"영국","Category":"도시","Fact":"런던(최상위 계층 세계도시)"},
-    {"Region":"유럽과 북부 아메리카","Country":"영국","Category":"갈등","Fact":"스코틀랜드 분리 독립 요구, 브렉시트(EU 탈퇴)"},
-    {"Region":"유럽과 북부 아메리카","Country":"미국","Category":"전통 공업","Fact":"러스트 벨트 - 뉴잉글랜드(경공업), 중부 대서양 연안(기계·제철), 오대호 연안(자동차·제철)"},
-    {"Region":"유럽과 북부 아메리카","Country":"미국","Category":"신흥 공업","Fact":"선벨트 - 멕시코만 연안 공업 지역, 태평양 연안 공업 지역"},
-    {"Region":"유럽과 북부 아메리카","Country":"미국","Category":"주요 도시","Fact":"뉴욕(UN 본부, 최상위 계층 세계도시), 시카고(철도·수운 교통, 고층 스카이라인), 디트로이트(자동차 산업 쇠퇴), 휴스턴(석유 화학·우주항공), 로스앤젤레스(할리우드 영화), 시애틀(보잉 항공기, 스타벅스 본사)"},
-    {"Region":"유럽과 북부 아메리카","Country":"프랑스","Category":"산업지역","Fact":"로렌(철강 공업, 쇠퇴), 르아브르·뒨케르크(임해 공업), 소피아 앙티폴리스(첨단 산업)"},
-    {"Region":"유럽과 북부 아메리카","Country":"프랑스","Category":"도시","Fact":"파리: 라데팡스 업무지구"},
-    {"Region":"유럽과 북부 아메리카","Country":"멕시코","Category":"산업·경제","Fact":"마킬라도라(미국 국경지대 조립가공업, NAFTA 이후 성장)"},
-    {"Region":"유럽과 북부 아메리카","Country":"독일","Category":"산업지역","Fact":"루르·자르·작센(전통 공업, 쇠퇴·재생 노력), 라인·슈네(임해 공업 지역), 라인강"},
-    {"Region":"유럽과 북부 아메리카","Country":"캐나다","Category":"사회·문화","Fact":"퀘벡주 프랑스어 사용, 분리 독립 요구"},
-    {"Region":"유럽과 북부 아메리카","Country":"캐나다","Category":"경제","Fact":"USMCA(미·멕·캐 협정) 참여, 자원 부국"},
-    {"Region":"유럽과 북부 아메리카","Country":"이탈리아","Category":"산업","Fact":"제3 이탈리아(섬유·의류·가죽, 중소기업 협동조합), 남북 경제 격차 큼"},
-    {"Region":"유럽과 북부 아메리카","Country":"이탈리아","Category":"갈등","Fact":"파다니아(이탈리아 북부) 분리 독립 운동"},
-    {"Region":"유럽과 북부 아메리카","Country":"스페인","Category":"산업","Fact":"빌바오 철강 산업(전통 공업, 쇠퇴)"},
-    {"Region":"유럽과 북부 아메리카","Country":"스페인","Category":"갈등","Fact":"카탈루냐 분리 독립(바르셀로나 중심), 바스크 분리 운동"},
-    {"Region":"유럽과 북부 아메리카","Country":"벨기에","Category":"특징","Fact":"EU 본부(브뤼셀) 소재"},
-    {"Region":"유럽과 북부 아메리카","Country":"스웨덴","Category":"특징","Fact":"시스타 사이언스 시티(스톡홀름, ICT 중심 첨단 산업 클러스터)"},
-    {"Region":"유럽과 북부 아메리카","Country":"핀란드","Category":"특징","Fact":"오울루(과거 제지·연어 무역항 ICT 클러스터, 노키아 중심, 산학 협력)"},
-    {"Region":"유럽과 북부 아메리카","Country":"스위스","Category":"특징","Fact":"EU 비회원국, 그러나 솅겐 협정 가입으로 자유 이동 가능"}
-];
+let geographyData = [];
+
+// CSV 파일을 읽어오는 함수
+async function loadCSV() {
+    try {
+        const response = await fetch('geography_data.csv');
+        const csvText = await response.text();
+        
+        // CSV를 파싱하여 객체 배열로 변환
+        const lines = csvText.trim().split('\n');
+        const headers = lines[0].split(',').map(header => header.replace(/"/g, '').trim());
+        
+        geographyData = [];
+        for (let i = 1; i < lines.length; i++) {
+            const values = parseCSVLine(lines[i]);
+            if (values.length === headers.length) {
+                const obj = {};
+                headers.forEach((header, index) => {
+                    obj[header] = values[index];
+                });
+                geographyData.push(obj);
+            }
+        }
+        
+        console.log(`${geographyData.length}개의 데이터를 로드했습니다.`);
+        // 데이터 로드 완료 후 시작 버튼 활성화
+        enableStartButtons();
+    } catch (error) {
+        console.error('CSV 파일을 로드하는 중 오류가 발생했습니다:', error);
+        alert('CSV 파일을 불러올 수 없습니다. geography_data.csv 파일이 있는지 확인하세요.');
+    }
+}
+
+// CSV 라인을 파싱하는 함수 (따옴표 안의 쉼표 처리)
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    
+    result.push(current.trim());
+    return result;
+}
+
+// 시작 버튼들을 활성화하는 함수
+function enableStartButtons() {
+    const buttons = document.querySelectorAll('#home-screen button');
+    buttons.forEach(button => {
+        button.disabled = false;
+        button.textContent = button.textContent.replace(' (로딩 중...)', '');
+    });
+}
+
+// 페이지 로드 시 CSV 파일 로드
+document.addEventListener('DOMContentLoaded', function() {
+    // 시작 버튼들을 비활성화하고 로딩 표시
+    const buttons = document.querySelectorAll('#home-screen button');
+    buttons.forEach(button => {
+        button.disabled = true;
+        button.textContent += ' (로딩 중...)';
+    });
+    
+    loadCSV();
+});
 
 let score = 0;
 let questionCount = 0;
@@ -116,6 +82,8 @@ let currentMode = '';
 let wrongAnswers = [];
 let isReviewMode = false;
 let reviewIndex = 0;
+let isAnswered = false;
+let correctAnswerClicked = false;
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -166,14 +134,44 @@ function getCountryToFactQuestion() {
     };
 }
 
+function getAllFactsForCountry(country) {
+    const facts = geographyData.filter(item => item.Country === country);
+    let allFacts = `<strong>${country}의 모든 특징:</strong><br><br>`;
+    
+    const regions = [...new Set(facts.map(item => item.Region))];
+    regions.forEach(region => {
+        allFacts += `<strong>지역:</strong> ${region}<br>`;
+    });
+    allFacts += `<br>`;
+    
+    const categories = [...new Set(facts.map(item => item.Category))];
+    categories.forEach(category => {
+        const categoryFacts = facts.filter(item => item.Category === category);
+        allFacts += `<strong>${category}:</strong><br>`;
+        categoryFacts.forEach(fact => {
+            allFacts += `• ${fact.Fact}<br>`;
+        });
+        allFacts += `<br>`;
+    });
+    
+    return allFacts;
+}
+
 function loadNewQuestion() {
     const nextButton = document.getElementById('next-button');
     const feedbackDiv = document.getElementById('feedback');
     const explanationBox = document.getElementById('explanation-box');
+    const instructionDiv = document.getElementById('instruction-message');
     
     nextButton.disabled = true;
     feedbackDiv.style.display = 'none';
     explanationBox.style.display = 'none';
+    if (instructionDiv) {
+        instructionDiv.style.display = 'none';
+    }
+    
+    isAnswered = false;
+    correctAnswerClicked = false;
 
     if (isReviewMode) {
         if (reviewIndex >= wrongAnswers.length) {
@@ -207,48 +205,113 @@ function loadNewQuestion() {
 }
 
 function checkAnswer(selectedLi, selectedOption) {
+    if (isAnswered && selectedOption !== currentQuestionData.correctAnswer) {
+        return; // 이미 답변했고, 정답이 아닌 경우 클릭 무시
+    }
+    
     const options = document.getElementById('options-list').children;
     const feedbackDiv = document.getElementById('feedback');
     const explanationBox = document.getElementById('explanation-box');
-    const nextButton = document.getElementById('next-button');
+    let instructionDiv = document.getElementById('instruction-message');
     
-    if (selectedLi.classList.contains('selected')) return;
+    if (!instructionDiv) {
+        // instruction-message div가 없으면 생성
+        instructionDiv = document.createElement('div');
+        instructionDiv.id = 'instruction-message';
+        instructionDiv.style.cssText = `
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        `;
+        document.querySelector('.question-box').appendChild(instructionDiv);
+    }
 
-    Array.from(options).forEach(li => {
-        const optionText = li.textContent.substring(3);
-        if (optionText === currentQuestionData.correctAnswer) {
-            li.classList.add('correct');
-        } else if (li === selectedLi) {
-            li.classList.add('incorrect');
+    if (!isAnswered) {
+        // 첫 번째 답변
+        isAnswered = true;
+        
+        Array.from(options).forEach(li => {
+            const optionText = li.textContent.substring(3);
+            if (optionText === currentQuestionData.correctAnswer) {
+                li.classList.add('correct');
+            } else if (li === selectedLi) {
+                li.classList.add('incorrect');
+            }
+            // 첫 답변 후에는 정답이 아닌 선택지 클릭 비활성화
+            if (optionText !== currentQuestionData.correctAnswer) {
+                li.onclick = null;
+                li.style.cursor = 'not-allowed';
+                li.style.opacity = '0.6';
+            }
+        });
+
+        feedbackDiv.style.display = 'block';
+        
+        if (selectedOption === currentQuestionData.correctAnswer) {
+            // 정답을 맞춘 경우
+            feedbackDiv.innerHTML = '정답입니다!';
+            feedbackDiv.classList.remove('incorrect');
+            feedbackDiv.classList.add('correct');
+            if (!isReviewMode) {
+                score++;
+            }
+            explanationBox.innerHTML = currentQuestionData.explanation;
+            explanationBox.style.display = 'block';
+            
+            // 1초 후 자동으로 다음 문제로
+            setTimeout(() => {
+                loadNewQuestion();
+            }, 1000);
+        } else {
+            // 틀린 경우
+            feedbackDiv.innerHTML = `틀렸습니다.<br>정답은 <strong>'${currentQuestionData.correctAnswer}'</strong>입니다.`;
+            feedbackDiv.classList.remove('correct');
+            feedbackDiv.classList.add('incorrect');
+            
+            // 정답 국가의 모든 특징 표시
+            let correctCountry;
+            if (currentQuestionData.type === 'fact_to_country') {
+                correctCountry = currentQuestionData.correctAnswer;
+            } else {
+                // country_to_fact 타입의 경우, 질문에서 국가명 추출
+                const questionText = currentQuestionData.questionText;
+                const match = questionText.match(/'([^']+)'/);
+                correctCountry = match ? match[1] : '';
+            }
+            
+            if (correctCountry) {
+                explanationBox.innerHTML = getAllFactsForCountry(correctCountry);
+            } else {
+                explanationBox.innerHTML = currentQuestionData.explanation;
+            }
+            explanationBox.style.display = 'block';
+            
+            if (!isReviewMode) {
+                wrongAnswers.push(currentQuestionData);
+            }
+            
+            // 정답 버튼을 한번 더 누르라는 메시지 표시
+            instructionDiv.innerHTML = '정답을 한번 더 클릭하면 다음 문제로 넘어갑니다.';
+            instructionDiv.style.display = 'block';
         }
-        li.onclick = null;
-    });
-
-    feedbackDiv.style.display = 'block';
-    
-    if (selectedOption === currentQuestionData.correctAnswer) {
-        feedbackDiv.innerHTML = '정답입니다!';
-        feedbackDiv.classList.remove('incorrect');
-        feedbackDiv.classList.add('correct');
+        
         if (!isReviewMode) {
-            score++;
+            document.getElementById('score-display').textContent = `점수: ${score}`;
         }
     } else {
-        feedbackDiv.innerHTML = `틀렸습니다.<br>정답은 <strong>'${currentQuestionData.correctAnswer}'</strong>입니다.`;
-        feedbackDiv.classList.remove('correct');
-        feedbackDiv.classList.add('incorrect');
-        if (!isReviewMode) {
-            wrongAnswers.push(currentQuestionData);
+        // 두 번째 클릭 (정답만 가능)
+        if (selectedOption === currentQuestionData.correctAnswer) {
+            correctAnswerClicked = true;
+            instructionDiv.style.display = 'none';
+            loadNewQuestion();
         }
     }
-    
-    explanationBox.innerHTML = currentQuestionData.explanation;
-    explanationBox.style.display = 'block';
-
-    if (!isReviewMode) {
-        document.getElementById('score-display').textContent = `점수: ${score}`;
-    }
-    nextButton.disabled = false;
 }
 
 function startGame(mode) {
@@ -314,7 +377,7 @@ document.addEventListener('keydown', function(event) {
         const options = document.getElementById('options-list').children;
         if (event.key >= '1' && event.key <= '4' && options[event.key - 1]) {
             const li = options[event.key - 1];
-            if (!li.classList.contains('selected')) {
+            if (li.onclick) { // 클릭 가능한 상태인지 확인
                 const optionText = li.textContent.substring(3);
                 checkAnswer(li, optionText);
             }
