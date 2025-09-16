@@ -15,6 +15,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    line-height: 1.6;
 }
 
 .container {
@@ -28,6 +29,7 @@ body {
     position: relative;
     animation: fadeIn 0.8s ease-out;
     border-top: 5px solid #007bff;
+    margin: 20px; /* Add margin for spacing on larger screens */
 }
 
 @keyframes fadeIn {
@@ -38,8 +40,12 @@ body {
 h1 {
     color: #1a2a40;
     margin-bottom: 20px;
-    font-size: 2.5em;
+    font-size: clamp(1.8em, 5vw, 2.5em); /* Responsive font size */
     font-weight: 700;
+}
+
+p {
+    font-size: clamp(1em, 2vw, 1.1em); /* Responsive font size for paragraphs */
 }
 
 .screen {
@@ -69,7 +75,7 @@ h1 {
 }
 
 .question-box p {
-    font-size: 1.2em;
+    font-size: clamp(1em, 2.5vw, 1.2em); /* Responsive font size */
     line-height: 1.6;
     font-weight: 500;
 }
@@ -88,9 +94,10 @@ h1 {
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     border: 2px solid transparent;
-    font-size: 1em;
+    font-size: clamp(0.9em, 2.5vw, 1em); /* Responsive font size */
     line-height: 1.4;
     font-weight: 500;
+    word-wrap: break-word; /* Ensure long options wrap correctly */
 }
 
 .options li:hover {
@@ -121,7 +128,7 @@ h1 {
     padding: 15px;
     border-radius: 10px;
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: clamp(1em, 3vw, 1.1em); /* Responsive font size */
     transition: all 0.3s ease;
 }
 
@@ -142,7 +149,7 @@ h1 {
     padding: 20px;
     background-color: #f0f8ff;
     border-radius: 12px;
-    font-size: 0.95em;
+    font-size: clamp(0.9em, 2.5vw, 0.95em); /* Responsive font size */
     line-height: 1.6;
     border-left: 4px solid #1e88e5;
     transition: all 0.3s ease;
@@ -160,7 +167,7 @@ button {
     padding: 14px 28px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: clamp(0.9em, 2.5vw, 1em); /* Responsive font size */
     font-weight: 500;
     margin: 8px;
     transition: all 0.3s ease;
@@ -181,7 +188,7 @@ button:disabled {
 }
 
 #score-display {
-    font-size: 1.3em;
+    font-size: clamp(1.1em, 3vw, 1.3em); /* Responsive font size */
     font-weight: bold;
     color: #007bff;
     margin: 20px 0;
@@ -191,7 +198,7 @@ button:disabled {
 }
 
 #progress-info {
-    font-size: 1.1em;
+    font-size: clamp(1em, 2.5vw, 1.1em); /* Responsive font size */
     color: #6c757d;
     margin-bottom: 15px;
 }
@@ -205,7 +212,7 @@ button:disabled {
 #end-quiz-btn button {
     background: linear-gradient(45deg, #dc3545, #c82333);
     padding: 10px 20px;
-    font-size: 0.9em;
+    font-size: clamp(0.8em, 2vw, 0.9em); /* Responsive font size */
     box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
 }
 
@@ -215,7 +222,7 @@ button:disabled {
 }
 
 .home-screen p {
-    font-size: 1.1em;
+    font-size: clamp(1em, 2.5vw, 1.1em); /* Responsive font size */
     margin-bottom: 30px;
     color: #666;
 }
@@ -225,7 +232,7 @@ button:disabled {
     width: 100%;
     max-width: 300px;
     margin: 15px auto;
-    font-size: 1.1em;
+    font-size: clamp(1em, 3vw, 1.1em); /* Responsive font size */
     padding: 18px;
 }
 
@@ -234,7 +241,7 @@ button:disabled {
 }
 
 #final-score {
-    font-size: 1.2em;
+    font-size: clamp(1.1em, 3vw, 1.2em); /* Responsive font size */
     margin: 25px 0;
     padding: 20px;
     background-color: #f8f9fa;
@@ -249,17 +256,13 @@ button:disabled {
 }
 
 @media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    
     .container {
         padding: 25px;
         margin: 10px;
-    }
-    
-    h1 {
-        font-size: 1.8em;
-    }
-    
-    .options li {
-        padding: 15px;
     }
     
     #end-quiz-btn {
