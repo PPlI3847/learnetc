@@ -83,7 +83,6 @@ let wrongAnswers = [];
 let isReviewMode = false;
 let reviewIndex = 0;
 let isAnswered = false;
-let correctAnswerClicked = false;
 
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -158,12 +157,10 @@ function getAllFactsForCountry(country) {
 }
 
 function loadNewQuestion() {
-    const nextButton = document.getElementById('next-button');
     const feedbackDiv = document.getElementById('feedback');
     const explanationBox = document.getElementById('explanation-box');
     const instructionDiv = document.getElementById('instruction-message');
     
-    nextButton.disabled = true;
     feedbackDiv.style.display = 'none';
     explanationBox.style.display = 'none';
     if (instructionDiv) {
@@ -171,7 +168,6 @@ function loadNewQuestion() {
     }
     
     isAnswered = false;
-    correctAnswerClicked = false;
 
     if (isReviewMode) {
         if (reviewIndex >= wrongAnswers.length) {
@@ -307,7 +303,6 @@ function checkAnswer(selectedLi, selectedOption) {
     } else {
         // 두 번째 클릭 (정답만 가능)
         if (selectedOption === currentQuestionData.correctAnswer) {
-            correctAnswerClicked = true;
             instructionDiv.style.display = 'none';
             loadNewQuestion();
         }
@@ -323,7 +318,6 @@ function startGame(mode) {
     document.getElementById('home-screen').classList.remove('active');
     document.getElementById('quiz-screen').classList.add('active');
     document.getElementById('end-quiz-btn').style.display = 'block';
-    document.getElementById('next-button').textContent = '다음 문제';
     loadNewQuestion();
 }
 
@@ -366,7 +360,6 @@ function showReview() {
     document.getElementById('end-screen').classList.remove('active');
     document.getElementById('quiz-screen').classList.add('active');
     document.getElementById('score-display').textContent = '오답 노트 모드';
-    document.getElementById('next-button').textContent = '다음 오답 문제';
     document.getElementById('end-quiz-btn').style.display = 'block';
     loadNewQuestion();
 }
@@ -381,9 +374,6 @@ document.addEventListener('keydown', function(event) {
                 const optionText = li.textContent.substring(3);
                 checkAnswer(li, optionText);
             }
-        }
-        if (event.key === 'Enter' && !document.getElementById('next-button').disabled) {
-            loadNewQuestion();
         }
     }
 });
