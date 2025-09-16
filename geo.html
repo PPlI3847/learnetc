@@ -25,7 +25,7 @@
             width: 100%;
             max-width: 600px;
             text-align: center;
-            position: relative; /* 자식 요소의 절대 위치 기준이 됨 */
+            position: relative;
         }
         h1 {
             color: #4CAF50;
@@ -146,6 +146,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
+            display: none;
         }
         #end-quiz-btn button {
             background-color: #f44336;
@@ -166,7 +167,7 @@
         </div>
 
         <div id="quiz-screen" class="screen quiz-section">
-            <div id="end-quiz-btn" style="display:none;">
+            <div id="end-quiz-btn">
                 <button onclick="endGame()">종료</button>
             </div>
             <p id="progress-info"></p>
@@ -317,7 +318,7 @@
             {"Region":"유럽과 북부 아메리카","Country":"스위스","Category":"특징","Fact":"EU 비회원국, 그러나 솅겐 협정 가입으로 자유 이동 가능"}
         ];
 
-        let score = 0;
+               let score = 0;
         let questionCount = 0;
         let currentQuestionData = {};
         let currentMode = '';
@@ -348,7 +349,7 @@
                 questionText: `다음 설명에 해당하는 나라는 어디일까요?<br>- ${entry.Fact}`,
                 correctAnswer: correctCountry,
                 options: options,
-                explanation: `**${entry.Country}**에 대한 정보입니다.<br>위치: ${entry.Region}<br>분류: ${entry.Category}<br>설명: ${entry.Fact}`
+                explanation: `<strong>${entry.Country}</strong>에 대한 정보입니다.<br>위치: ${entry.Region}<br>분류: ${entry.Category}<br>설명: ${entry.Fact}`
             };
         }
 
@@ -370,7 +371,7 @@
                 questionText: `다음 설명 중 '${correctCountry}'에 대한 설명은 무엇일까요?`,
                 correctAnswer: correctFact,
                 options: options,
-                explanation: `**${correctCountry}**에 대한 정보입니다.<br>위치: ${correctFactEntry.Region}<br>분류: ${correctFactEntry.Category}<br>설명: ${correctFactEntry.Fact}`
+                explanation: `<strong>${correctCountry}</strong>에 대한 정보입니다.<br>위치: ${correctFactEntry.Region}<br>분류: ${correctFactEntry.Category}<br>설명: ${correctFactEntry.Fact}`
             };
         }
 
@@ -443,14 +444,16 @@
                 feedback.classList.remove('correct');
                 feedback.classList.add('incorrect');
                 if (!isReviewMode) {
-                    wrongAnswers.push(currentQuestionData);
+                    wrongAnswers.push(JSON.parse(JSON.stringify(currentQuestionData)));
                 }
             }
             
             explanationBox.innerHTML = currentQuestionData.explanation;
             explanationBox.style.display = 'block';
 
-            document.getElementById('score-display').textContent = `점수: ${score}`;
+            if (!isReviewMode) {
+                document.getElementById('score-display').textContent = `점수: ${score}`;
+            }
             nextButton.disabled = false;
         }
 
@@ -463,6 +466,7 @@
             document.getElementById('home-screen').classList.remove('active');
             document.getElementById('quiz-screen').classList.add('active');
             document.getElementById('end-quiz-btn').style.display = 'block';
+            document.getElementById('score-display').textContent = `점수: 0`;
             loadNewQuestion();
         }
         
@@ -501,7 +505,6 @@
     </script>
 </body>
 </html>
-
 
 
 
