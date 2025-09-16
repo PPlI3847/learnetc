@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>세계 지리 수행평가 퀴즈</title>
+    <title>세계 지리 마스터 퀴즈</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,6 +25,7 @@
             width: 100%;
             max-width: 600px;
             text-align: center;
+            position: relative; /* 자식 요소의 절대 위치 기준이 됨 */
         }
         h1 {
             color: #4CAF50;
@@ -140,6 +141,18 @@
             padding: 8px 16px;
             font-size: 0.9em;
         }
+        /* 종료 버튼 스타일 */
+        #end-quiz-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        #end-quiz-btn button {
+            background-color: #f44336;
+        }
+        #end-quiz-btn button:hover {
+            background-color: #d32f2f;
+        }
     </style>
 </head>
 <body>
@@ -152,6 +165,9 @@
         </div>
 
         <div id="quiz-screen" class="screen quiz-section">
+            <div id="end-quiz-btn" style="display:none;">
+                <button onclick="endGame()">종료</button>
+            </div>
             <p id="progress-info"></p>
             <p id="score-display">점수: 0</p>
             <div class="question-box">
@@ -162,7 +178,6 @@
             <div id="explanation-box" class="explanation" style="display:none;"></div>
             <div class="navigation-buttons">
                 <button id="next-button" onclick="loadNewQuestion()" disabled>다음 문제</button>
-                <button onclick="endGame()">종료</button>
             </div>
         </div>
         
@@ -365,13 +380,13 @@
 
             if (isReviewMode) {
                 if (reviewIndex >= wrongAnswers.length) {
-                    alert('문제를 모두 풀었습니다!');
+                    alert('오답 문제를 모두 풀었습니다!');
                     endGame();
                     return;
                 }
                 currentQuestionData = wrongAnswers[reviewIndex];
                 reviewIndex++;
-                document.getElementById('progress-info').textContent = `문제 (${reviewIndex}/${wrongAnswers.length})`;
+                document.getElementById('progress-info').textContent = `오답 문제 (${reviewIndex}/${wrongAnswers.length})`;
             } else {
                 if (currentMode === 'fact_to_country') {
                     currentQuestionData = getFactToCountryQuestion();
@@ -444,6 +459,7 @@
             isReviewMode = false;
             document.getElementById('home-screen').classList.remove('active');
             document.getElementById('quiz-screen').classList.add('active');
+            document.getElementById('end-quiz-btn').style.display = 'block';
             loadNewQuestion();
         }
         
@@ -451,8 +467,9 @@
             document.getElementById('quiz-screen').classList.remove('active');
             document.getElementById('review-screen').classList.remove('active');
             document.getElementById('end-screen').classList.add('active');
+            document.getElementById('end-quiz-btn').style.display = 'none';
             if (isReviewMode) {
-                document.getElementById('final-score').textContent = `문제를 모두 풀었습니다!`;
+                document.getElementById('final-score').textContent = `오답 문제를 모두 풀었습니다!`;
             } else {
                 document.getElementById('final-score').textContent = `총 ${questionCount}문제 중 ${score}문제를 맞히셨습니다.`;
             }
@@ -474,9 +491,17 @@
             document.getElementById('end-screen').classList.remove('active');
             document.getElementById('quiz-screen').classList.add('active');
             document.getElementById('score-display').textContent = `오답 노트`;
-            document.getElementById('next-button').textContent = '다음 문제';
+            document.getElementById('next-button').textContent = '다음 오답 문제';
+            document.getElementById('end-quiz-btn').style.display = 'block';
             loadNewQuestion();
         }
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
