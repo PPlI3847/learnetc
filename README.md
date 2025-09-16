@@ -1,4 +1,7 @@
 # learnetc
+
+https://ppli3847.github.io/learnetc/
+
 For helping learning something for school
 
 If you see this screen, the error might be occured, wait for a min
