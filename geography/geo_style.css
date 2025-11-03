@@ -14,22 +14,25 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     line-height: 1.6;
+    font-size: 16px;
 }
 
 .container {
     background-color: white;
-    padding: 40px;
+    padding: 20px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     width: 100%;
     max-width: 700px;
     text-align: center;
-    position: relative;
+    position: relative; 
     animation: fadeIn 0.8s ease-out;
+    font-size: 16px;
     border-top: 5px solid #007bff;
-    margin: 20px; /* Add margin for spacing on larger screens */
+    margin: 20px;
+    overflow: hidden; 
 }
 
 @keyframes fadeIn {
@@ -40,12 +43,12 @@ body {
 h1 {
     color: #1a2a40;
     margin-bottom: 20px;
-    font-size: clamp(1.8em, 5vw, 2.5em); /* Responsive font size */
+    font-size: clamp(1.8em, 5vw, 2.5em);
     font-weight: 700;
 }
 
 p {
-    font-size: clamp(1em, 2vw, 1.1em); /* Responsive font size for paragraphs */
+    font-size: clamp(1em, 2vw, 1.1em);
 }
 
 .screen {
@@ -75,7 +78,7 @@ p {
 }
 
 .question-box p {
-    font-size: clamp(1em, 2.5vw, 1.2em); /* Responsive font size */
+    font-size: clamp(1em, 2.5vw, 1.2em);
     line-height: 1.6;
     font-weight: 500;
 }
@@ -87,17 +90,19 @@ p {
 }
 
 .options li {
-    background-color: #e9ecef;
-    margin-bottom: 12px;
-    padding: 18px 20px;
-    border-radius: 12px;
+    background-color: white;
+    border: 2px solid #e1e8ed;
+    border-radius: 10px;
+    padding: 12px 15px;
+    margin: 8px 0;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    border: 2px solid transparent;
-    font-size: clamp(0.9em, 2.5vw, 1em); /* Responsive font size */
-    line-height: 1.4;
+    transition: all 0.3s ease;
     font-weight: 500;
-    word-wrap: break-word; /* Ensure long options wrap correctly */
+    position: relative;
+    overflow: hidden;
+    font-size: 1em;
+    line-height: 1.4;
+    word-break: keep-all;
 }
 
 .options li:hover {
@@ -128,7 +133,7 @@ p {
     padding: 15px;
     border-radius: 10px;
     font-weight: bold;
-    font-size: clamp(1em, 3vw, 1.1em); /* Responsive font size */
+    font-size: clamp(1em, 3vw, 1.1em);
     transition: all 0.3s ease;
 }
 
@@ -139,39 +144,25 @@ p {
 }
 
 .feedback.incorrect {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    display: none;
 }
 
 .explanation {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: #f0f8ff;
-    border-radius: 12px;
-    font-size: clamp(0.9em, 2.5vw, 0.95em); /* Responsive font size */
-    line-height: 1.6;
-    border-left: 4px solid #1e88e5;
-    transition: all 0.3s ease;
-}
-
-.explanation strong {
-    color: #1565c0;
-    font-size: 1.1em;
+    display: none; 
 }
 
 button {
-    background: linear-gradient(45deg, #007bff, #0056b3);
+    background-color: #4a90e2;
     color: white;
     border: none;
-    padding: 14px 28px;
+    padding: 12px 24px;
     border-radius: 8px;
-    cursor: pointer;
-    font-size: clamp(0.9em, 2.5vw, 1em); /* Responsive font size */
-    font-weight: 500;
+    font-size: 1em;
     margin: 8px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: auto;
+    max-width: 100%;
 }
 
 button:hover {
@@ -188,7 +179,7 @@ button:disabled {
 }
 
 #score-display {
-    font-size: clamp(1.1em, 3vw, 1.3em); /* Responsive font size */
+    font-size: clamp(1.1em, 3vw, 1.3em);
     font-weight: bold;
     color: #007bff;
     margin: 20px 0;
@@ -198,21 +189,22 @@ button:disabled {
 }
 
 #progress-info {
-    font-size: clamp(1em, 2.5vw, 1.1em); /* Responsive font size */
+    font-size: clamp(1em, 2.5vw, 1.1em);
     color: #6c757d;
     margin-bottom: 15px;
 }
 
 #end-quiz-btn {
     position: absolute;
-    top: 20px;
+    top: 15px; /* [수정] 20px에서 15px로 변경 */
     right: 20px;
+    z-index: 5; /* [추가] 모달 오버레이보다 아래에 있지만 다른 요소보다는 위에 있도록 설정 */
 }
 
 #end-quiz-btn button {
     background: linear-gradient(45deg, #dc3545, #c82333);
     padding: 10px 20px;
-    font-size: clamp(0.8em, 2vw, 0.9em); /* Responsive font size */
+    font-size: clamp(0.8em, 2vw, 0.9em);
     box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
 }
 
@@ -222,7 +214,7 @@ button:disabled {
 }
 
 .home-screen p {
-    font-size: clamp(1em, 2.5vw, 1.1em); /* Responsive font size */
+    font-size: clamp(1em, 2.5vw, 1.1em);
     margin-bottom: 30px;
     color: #666;
 }
@@ -232,7 +224,7 @@ button:disabled {
     width: 100%;
     max-width: 300px;
     margin: 15px auto;
-    font-size: clamp(1em, 3vw, 1.1em); /* Responsive font size */
+    font-size: clamp(1em, 3vw, 1.1em);
     padding: 18px;
 }
 
@@ -241,7 +233,7 @@ button:disabled {
 }
 
 #final-score {
-    font-size: clamp(1.1em, 3vw, 1.2em); /* Responsive font size */
+    font-size: clamp(1.1em, 3vw, 1.2em);
     margin: 25px 0;
     padding: 20px;
     background-color: #f8f9fa;
@@ -255,18 +247,106 @@ button:disabled {
     margin-top: 25px;
 }
 
+/* 모달(팝업) 스타일 */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 15px;
+    animation: fadeScreenIn 0.3s ease-out;
+    border-radius: 20px; 
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 20px; 
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    max-width: 550px;
+    text-align: left;
+    animation: modalPopIn 0.3s ease-out;
+}
+
+@keyframes modalPopIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content h3 {
+    font-size: clamp(1.5em, 4vw, 1.8em);
+    font-weight: 700;
+    color: #dc3545;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modal-explanation {
+    font-size: clamp(0.9em, 2.5vw, 1em);
+    line-height: 1.7;
+    margin-bottom: 25px;
+    max-height: 50vh;
+    overflow-y: auto;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.modal-explanation strong {
+    color: #0056b3;
+}
+
+.modal-confirm-btn {
+    background: linear-gradient(45deg, #28a745, #218838);
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: clamp(1em, 3vw, 1.1em);
+    margin: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.modal-confirm-btn:hover {
+    background: linear-gradient(45deg, #218838, #1e7e34);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+}
+/* --- 모달 스타일 끝 --- */
+
+
 @media (max-width: 600px) {
     body {
         padding: 10px;
     }
     
     .container {
-        padding: 25px;
+        padding: 15px;
         margin: 10px;
+    }
+
+    .question-box {
+        padding: 20px;
     }
     
     #end-quiz-btn {
-        top: 10px;
-        right: 10px;
+        /* [수정] 모바일에서도 동일하게 15px 적용 */
+        top: 15px; 
+        right: 15px; /* [수정] 모바일에서는 오른쪽 여백도 15px로 조정 */
+    }
+
+    .modal-content {
+        padding: 20px;
     }
 }
