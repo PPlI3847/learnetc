@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스타트업 칩 투자 보드게임</title>
+    <style>
+        /* 세련된 다크 모드 & 글래스모피즘 디자인 */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", sans-serif; 
+            text-align: center; 
+            background: linear-gradient(135deg, #0f172a, #1e293b); 
+            color: #f8fafc;
+            margin: 0;
+            padding: 20px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+        #container { 
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4); 
+            width: 100%;
+            max-width: 650px; 
+        }
+        h1 { font-size: 1.5em; color: #94a3b8; margin-bottom: 20px; font-weight: 500; }
+        
+        /* 칩 가치 텍스트 */
+        .chip-value { 
+            font-size: 5.5em; 
+            font-weight: 900; 
+            margin: 5px 0 15px 0; 
+            letter-spacing: -2px; 
+            text-shadow: 0 0 20px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        .up { color: #ff4d4d; } 
+        .down { color: #3b82f6; } 
+        .same { color: #cbd5e1; } 
+        .loading-text { color: #facc15; text-shadow: 0 0 15px rgba(250, 204, 21, 0.5); }
+        
+        /* 칩 뱃지 */
+        .chip-badge { 
+            display: inline-block; 
+            padding: 10px 24px; 
+            border-radius: 50px; 
+            color: white; 
+            font-weight: 800; 
+            font-size: 1.3em;
+            box-shadow: inset 0 3px 6px rgba(255,255,255,0.3), 0 4px 10px rgba(0,0,0,0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .chip-red { background: linear-gradient(145deg, #ef4444, #dc2626); }
+        .chip-green { background: linear-gradient(145deg, #22c55e, #16a34a); }
+        .chip-blue { background: linear-gradient(145deg, #3b82f6, #2563eb); }
+        .chip-black { background: linear-gradient(145deg, #334155, #0f172a); border: 1px solid #475569;}
+        .chip-loading { background: linear-gradient(145deg, #ca8a04, #a16207); animation: pulse 1s infinite; }
+        
+        /* 상태 메시지 */
+        #statusMessage { 
+            font-size: 1.2em; 
+            font-weight: 600; 
+            margin-bottom: 25px; 
+            min-height: 30px; 
+            color: #94a3b8;
+        }
+
+        /* 깜빡이는 애니메이션 (로딩용) */
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .blink { animation: pulse 1s infinite; }
+
+        /* 캔버스 (주식 그래프) */
+        canvas { 
+            background: rgba(0, 0, 0, 0.2); 
+            border-radius: 16px; 
+            margin: 10px 0 30px 0; 
+            width: 100%; 
+            height: 320px; 
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+        }
+        
+        /* 조작 버튼 */
+        button { 
+            font-size: 1.5em; 
+            padding: 18px 40px; 
+            background: linear-gradient(145deg, #6366f1, #4f46e5); 
+            color: white; 
+            border: none; 
+            border-radius: 16px; 
+            cursor: pointer; 
+            font-weight: bold;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+        }
+        button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(79, 70, 229, 0.4); }
+        button:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 5px 10px rgba(79, 70, 229, 0.3); }
+        button:disabled { background: #475569; cursor: not-allowed; opacity: 0.7; box-shadow: none; }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <h1>⚪ 기준 주가 (흰칩 1개)</h1>
+        
+        <div id="chipBadge" class="chip-badge chip-green">🟢 초록칩 ($5)</div>
+        <div id="currentValue" class="chip-value same">$5</div>
+        <div id="statusMessage">게임을 시작하세요! 현실의 칩을 배팅하세요.</div>
+        
+        <canvas id="stockChart" width="600" height="320"></canvas>
+        
+        <button id="rollButton" onclick="triggerTurn()">🎲 주가 변동 (다음 턴)</button>
+    </div>
+
+    <script>
+        const chipTypes = [
+            { name: '🔴 빨간칩', value: 1, colorClass: 'chip-red' },
+            { name: '🟢 초록칩', value: 5, colorClass: 'chip-green' },
+            { name: '🔵 파란칩', value: 25, colorClass: 'chip-blue' },
+            { name: '⚫️ 검은칩', value: 125, colorClass: 'chip-black' }
+        ];
+        
+        let history = [5]; 
+        const canvas = document.getElementById('stockChart');
+        const ctx = canvas.getContext('2d');
+        
+        function getY(value, minVal, maxVal, height, padding) {
+            return canvas.height - padding - ((value - minVal) / (maxVal - minVal)) * height;
+        }
+
+        function drawChart() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const padding = 40;
+            const maxVal = 125; 
+            const minVal = 0;   
+            const width = canvas.width - padding * 2;
+            const height = canvas.height - padding * 2;
+            
+            ctx.textAlign = "right";
+            ctx.textBaseline = "middle";
+            ctx.font = "12px sans-serif";
+            const guideValues = [1, 5, 25, 125];
+            
+            guideValues.forEach(val => {
+                const y = getY(val, minVal, maxVal, height, padding);
+                
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(canvas.width - padding, y);
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                
+                ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+                ctx.fillText("$" + val, padding - 10, y);
+            });
+
+            if (history.length === 0) return;
+
+            const stepX = history.length > 1 ? width / (history.length - 1) : width;
+            let points = history.map((val, i) => ({
+                x: padding + i * stepX,
+                y: getY(val, minVal, maxVal, height, padding)
+            }));
+
+            let mainColor = '#22c55e'; 
+            if (history.length > 1) {
+                const last = history[history.length - 1];
+                const prev = history[history.length - 2];
+                if (last > prev) mainColor = '#ff4d4d'; 
+                else if (last < prev) mainColor = '#3b82f6'; 
+                else mainColor = '#94a3b8'; 
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            
+            for(let i = 0; i < points.length - 1; i++) {
+                const cpX = (points[i].x + points[i+1].x) / 2;
+                ctx.bezierCurveTo(cpX, points[i].y, cpX, points[i+1].y, points[i+1].x, points[i+1].y);
+            }
+
+            ctx.lineTo(points[points.length-1].x, canvas.height - padding + 10);
+            ctx.lineTo(points[0].x, canvas.height - padding + 10);
+            ctx.closePath();
+
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, mainColor + '80'); 
+            gradient.addColorStop(1, mainColor + '00'); 
+            
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(points[0].x, points[0].y);
+            for(let i = 0; i < points.length - 1; i++) {
+                const cpX = (points[i].x + points[i+1].x) / 2;
+                ctx.bezierCurveTo(cpX, points[i].y, cpX, points[i+1].y, points[i+1].x, points[i+1].y);
+            }
+            
+            ctx.strokeStyle = mainColor;
+            ctx.lineWidth = 4;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.stroke();
+
+            for (let i = 0; i < points.length; i++) {
+                ctx.beginPath();
+                ctx.arc(points[i].x, points[i].y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = (i === points.length - 1) ? '#fff' : mainColor;
+                ctx.fill();
+                
+                if(i === points.length - 1) {
+                    ctx.shadowColor = mainColor;
+                    ctx.shadowBlur = 15;
+                    ctx.stroke();
+                    ctx.shadowBlur = 0; 
+                } else {
+                    ctx.strokeStyle = '#1e293b';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            }
+        }
+        
+        // 💡 더욱 현실적으로 조정된 확률 시스템
+        function getRandomChipWithWeight() {
+            const rand = Math.random() * 100; 
+            
+            // 35%: 떡락장 (빨간칩 $1) - 하락도 꽤 자주 일어남
+            if (rand < 35) {
+                return chipTypes[0]; 
+            } 
+            // 45%: 횡보/소폭 상승 (초록칩 $5) - 가장 일반적인 상황
+            else if (rand < 80) {
+                return chipTypes[1]; 
+            } 
+            // 17%: 급상승장 (파란칩 $25) - 가끔 찾아오는 기회
+            else if (rand < 97) {
+                return chipTypes[2]; 
+            } 
+            // 3%: 투더문! (검은칩 $125) - 극악의 확률로 터지는 잭팟
+            else {
+                return chipTypes[3]; 
+            }
+        }
+
+        // 💡 버튼을 눌렀을 때 딜레이(긴장감)를 주는 함수
+        function triggerTurn() {
+            const btn = document.getElementById('rollButton');
+            const valueEl = document.getElementById('currentValue');
+            const badgeEl = document.getElementById('chipBadge');
+            const statusEl = document.getElementById('statusMessage');
+
+            // 1. 버튼 비활성화 (연타 방지)
+            btn.disabled = true;
+            btn.innerText = "계산 중...";
+
+            // 2. 긴장감을 주는 연출 효과 적용
+            valueEl.innerText = "$?";
+            valueEl.className = 'chip-value loading-text blink';
+            badgeEl.innerText = "🎲 주가 변동 중...";
+            badgeEl.className = 'chip-badge chip-loading';
+            statusEl.innerHTML = '⏳ <strong>시장의 반응을 기다리고 있습니다...</strong>';
+            statusEl.style.color = '#facc15';
+            statusEl.classList.add('blink');
+
+            // 3. 1.2초(1200ms) 후에 결과 공개!
+            setTimeout(() => {
+                processResult();
+                
+                // 버튼 다시 활성화 및 애니메이션 제거
+                btn.disabled = false;
+                btn.innerText = "🎲 주가 변동 (다음 턴)";
+                statusEl.classList.remove('blink');
+            }, 1200);
+        }
+
+        // 실제 결과를 계산하고 화면에 그리는 함수
+        function processResult() {
+            const prevValue = history[history.length - 1];
+            const randomChip = getRandomChipWithWeight();
+            const newValue = randomChip.value;
+            
+            history.push(newValue);
+            
+            const valueEl = document.getElementById('currentValue');
+            const badgeEl = document.getElementById('chipBadge');
+            const statusEl = document.getElementById('statusMessage');
+            
+            valueEl.innerText = '$' + newValue;
+            badgeEl.innerText = randomChip.name + ' ($' + newValue + ')';
+            badgeEl.className = 'chip-badge ' + randomChip.colorClass;
+            
+            if (newValue > prevValue) {
+                valueEl.className = 'chip-value up';
+                statusEl.innerHTML = '🚀 <strong>가치 폭등!</strong> 주가가 올랐습니다!';
+                statusEl.style.color = '#ff4d4d';
+            } else if (newValue < prevValue) {
+                valueEl.className = 'chip-value down';
+                statusEl.innerHTML = '📉 <strong>가치 폭락!</strong> 주가가 떨어졌습니다.';
+                statusEl.style.color = '#3b82f6';
+            } else {
+                valueEl.className = 'chip-value same';
+                statusEl.innerHTML = '➖ <strong>변동 없음.</strong> 숨을 고르는 중입니다.';
+                statusEl.style.color = '#cbd5e1';
+            }
+            
+            drawChart();
+        }
+        
+        drawChart();
+    </script>
+</body>
+</html>
